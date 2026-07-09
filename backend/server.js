@@ -25,6 +25,12 @@ app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/upload', uploadRoutes);
 
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+  });
+});
+
 app.get('/api/config/paypal', (req, res) =>
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 );
