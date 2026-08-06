@@ -1,0 +1,31 @@
+{{- if .Values.ingress.enabled }}
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: 
+  name: {{ include "proshop-chart.fullname" . }}-proshop-ingress
+
+spec:
+  ingressClassName: nginx
+
+  rules:
+  - http: 
+      paths:
+
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "proshop-chart.fullname" . }}-frontend-service
+            port:
+              number: {{ .Values.frontend.service.port }}
+
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "proshop-chart.fullname" . }}-backend-service
+            port:
+              number: {{ .Values.backend.service.port }}  
+
+{{- end }}

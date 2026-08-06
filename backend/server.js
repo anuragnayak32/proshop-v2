@@ -27,7 +27,7 @@ app.use('/api/upload', uploadRoutes);
 
 app.get('/health', (req, res) => {
   res.status(200).json({
-    status: 'OK',
+    status: 'OK V3',
   });
 });
 
@@ -55,5 +55,5 @@ app.use(notFound);
 app.use(errorHandler);
 
 app.listen(port, () =>
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`)
+  console.log(`Server v3 running in ${process.env.NODE_ENV} mode on port ${port}`)
 );

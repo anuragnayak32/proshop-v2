@@ -5,7 +5,14 @@ metadata:
   name: backend-deployment
 
 spec:
-  replicas: 1
+  replicas: 3
+
+  strategy:
+    type: RollingUpdate
+
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
 
   selector:
     matchLabels:
@@ -19,7 +26,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: proshop-v2-backend:v2
+          image: proshop-v2-backend:v3
           imagePullPolicy: Never
 
           ports:

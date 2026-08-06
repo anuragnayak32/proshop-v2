@@ -1,0 +1,6 @@
+backend:
+  replicaCount: 1
+
+ingress:
+  enabled: true
+

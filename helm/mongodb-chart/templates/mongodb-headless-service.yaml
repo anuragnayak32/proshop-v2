@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: {{ include "mongodb-chart.fullname" . }}-mongodb-headless
+
+spec:
+  clusterIP: None
+
+  selector:
+    app: mongodb
+
+  ports:
+    # - port: 27017
+    #   targetPort: kube27017  
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}

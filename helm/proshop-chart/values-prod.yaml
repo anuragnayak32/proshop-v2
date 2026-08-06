@@ -1,0 +1,9 @@
+backend:
+  repicaCount: 5
+  
+frontend:
+  replicaCount: 3  
+
+
+ingress:
+  enabled: true

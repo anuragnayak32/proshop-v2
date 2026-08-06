@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: {{include "proshop-chart.fullname" . }}-backend
+
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+
+  strategy:
+    type: RollingUpdate
+
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  selector:
+    matchLabels:
+      app: backend
+
+  template:
+    metadata:
+      labels:
+        app: backend
+
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+
+          ports:
+            - containerPort: {{ .Values.backend.containerPort}}
+
+          livenessProbe:
+            # httpGet:
+            #   path: /health
+            #   port: 5000
+
+            # initialDelaySeconds: 10
+            # periodSeconds: 5  
+            {{- toYaml .Values.backend.livenessProbe | nindent 12 }}
+
+          readinessProbe:
+            # httpGet:
+            #   path: /health
+            #   port: 5000
+            # initialDelaySeconds: 5
+            # periodSeconds: 5 
+            {{- toYaml .Values.backend.readinessProbe | nindent 12 }}
+
+          resources:
+            {{- toYaml .Values.backend.resources | nindent 12 }}
+            # requests:
+            #   memory: "256Mi"
+            #   cpu: "250m"
+
+            # limits:
+            #   memory: "512Mi"
+            #   cpu: "500m"
+
+
+          envFrom:
+            # - configMapRef:
+            #     name: backend-config
+            - configMapRef:
+                name: {{ include "proshop-chart.fullname" . }}-config
+
+            - secretRef:
+                # name: backend-secret
+                name: {{ include "proshop-chart.fullname" . }}-secret    
+
+                   
