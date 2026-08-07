@@ -97,10 +97,11 @@ pipeline {
         }
 
 
-        stage('Cleanup') {
+       stage('Cleanup') {
             steps {
                 sh '''
-                docker image prune -f
+                    docker image prune -f
+                    docker builder prune -f
                 '''
             }
         }
