@@ -59,7 +59,7 @@ pipeline {
         stage('Docker Login'){
             steps {
                 sh '''
-                echo "$DOCKER_CREDENTIALS_PSW | docker login -u $DOCKER_CREDENTIALS_USR" --password-stdin
+                echo "$DOCKER_CREDENTIALS_PSW" | docker login -u "$DOCKER_CREDENTIALS_USR --password-stdin
                 '''
             }
         }
@@ -93,6 +93,15 @@ pipeline {
         stage('Docker Logout') {
             steps {
                 sh 'docker logout'
+            }
+        }
+
+
+        stage('Cleanup') {
+            steps {
+                sh '''
+                docker image prune -f
+                '''
             }
         }
     }
