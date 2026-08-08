@@ -46,6 +46,7 @@ pipeline {
 
     environment {
         DOCKER_CREDENTIALS = credentials('dockerhub')
+        KUBECONFIG = '/root/.kube/jenkins-config'
     }
 
     stages {
@@ -87,6 +88,32 @@ pipeline {
             steps {
                 sh 'docker tag proshop-frontend:$BUILD_NUMBER anurag32/proshop-frontend:$BUILD_NUMBER'
                 sh 'docker push anurag32/proshop-frontend:$BUILD_NUMBER'
+            }
+        }
+
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                    helm upgrade --install proshop-dev ./helm/proshop-chart \
+                    -f ./helm/proshop-chart/values-dev.yaml \
+                    --set backend.image.repository=anurag32/proshop-backend \
+                    --set backend.image.tag=$BUILD_NUMBER \
+                    --set backend.image.pullPolicy=IfNotPresent \
+                    --set frontend.image.repository=anurag32/proshop-frontend \
+                    --set frontend.image.tag=$BUILD_NUMBER \
+                    --set frontend.image.pullPolicy=IfNotPresent
+                '''
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                sh '''
+                    kubectl get pods
+                    kubectl get deployments
+                    helm status proshop-dev
+                '''
             }
         }
 
