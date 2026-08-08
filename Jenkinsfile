@@ -124,7 +124,7 @@ pipeline {
         }
 
 
-       stage('Cleanup') {
+       stage('Cleanup Caches and Unused Images') {
             steps {
                 sh '''
                     docker image prune -f
